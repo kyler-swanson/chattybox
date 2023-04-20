@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  	function isLoggedIn() {
+    	return request.auth != null
+    }
+  
+    function isCalm() {
+      return getAfter(/databases/$(database)/documents/users/$(request.auth.uid)).data.last_operation
+              > get(/databases/$(database)/documents/users/$(request.auth.uid)).data.last_operation + duration.value(1, 's')
+    }
+    
+    function isMine() {
+    	return isLoggedIn() && request.auth.uid == resource.data.authorUid
+    }
+    
+    function isAddingReaction() {
+    	return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reactions'])
+      				&& request.resource.data.reactions.size() == resource.data.reactions.size() + 1;
+    }
+    
+    // Allow public read access, but only content owners can write
+    match /messages/{document} {
+      allow read: if true
+      allow create: if isLoggedIn() && isCalm()
+      allow update: if (isAddingReaction() || isMine()) && isLoggedIn() && isCalm()
+      allow delete: if isMine() && isCalm()
+    }
+    
+    match /users/{user} {
+    	allow read: if request.auth.uid == resource.data.uid
+      allow write: if isLoggedIn()
+    }
+  }
+}
