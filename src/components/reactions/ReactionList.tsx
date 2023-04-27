@@ -14,7 +14,7 @@ export default function ReactionList({ message }: { message: Message }) {
   };
 
   return (
-    <div className={`inline-flex items-center flex-wrap gap-1 ${!user && message.reactions.length === 0 && 'hidden'}`}>
+    <div className={`inline-flex items-center flex-wrap gap-1 ${message.reactions.length === 0 && 'hidden'}`}>
       {message.reactions.map((reaction, i) => (
         <ReactionButton key={i} message={message} reaction={reaction} />
       ))}
