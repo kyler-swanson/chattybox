@@ -7,7 +7,7 @@ service cloud.firestore {
   
     function isCalm() {
       return getAfter(/databases/$(database)/documents/users/$(request.auth.uid)).data.last_operation
-              > get(/databases/$(database)/documents/users/$(request.auth.uid)).data.last_operation + duration.value(1, 's')
+              > get(/databases/$(database)/documents/users/$(request.auth.uid)).data.last_operation + duration.value(500, 'ms')
     }
     
     function isMine() {
@@ -19,11 +19,17 @@ service cloud.firestore {
       				&& request.resource.data.reactions.size() == resource.data.reactions.size() + 1;
     }
     
+    function isRemovingReaction() {
+    	return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reactions'])
+      			  && resource.data.reactions.removeAll(request.resource.data.reactions)[0].authorUid == request.auth.uid
+      				&& request.resource.data.reactions.size() == resource.data.reactions.size() - 1;
+    }
+    
     // Allow public read access, but only content owners can write
     match /messages/{document} {
       allow read: if true
       allow create: if isLoggedIn() && isCalm()
-      allow update: if (isAddingReaction() || isMine()) && isLoggedIn() && isCalm()
+      allow update: if (isAddingReaction() || isRemovingReaction() || isMine()) && isLoggedIn() && isCalm()
       allow delete: if isMine() && isCalm()
     }
     
