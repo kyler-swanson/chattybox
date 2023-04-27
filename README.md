@@ -2,6 +2,10 @@
 
 ChattyBox is a web application that allows users to chat in real-time with others. It is built using React for the frontend and Firebase for the backend. 🚀
 
+## Demo
+
+https://chattybox-c0902.web.app
+
 ## Features
 
 ChattyBox lets you join a lively community and interact with others in real-time. Here's what you can do: 🎉
