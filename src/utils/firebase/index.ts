@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, User } from 'firebase/auth';
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 import {
   arrayUnion,
   arrayRemove,
@@ -17,11 +18,16 @@ import {
 import { Message } from '../../types/Message';
 import { Reaction } from '../../types/Reaction';
 import { UserInfo } from '../../types/UserInfo';
-import { config } from './config';
+import { config, RECAPTCHA_PUB_KEY } from './config';
 
 const app = initializeApp(config);
 const db = getFirestore(app);
 const auth = getAuth(app);
+
+const appCheck = initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider(RECAPTCHA_PUB_KEY!),
+  isTokenAutoRefreshEnabled: true
+});
 
 const createCollection = <T = DocumentData>(name: string) => {
   return collection(db, name) as CollectionReference<T>;
@@ -178,4 +184,16 @@ const removeReaction = async (message: Message, reaction: Reaction) => {
   }
 };
 
-export { db, auth, createUserInfo, addMessage, editMessage, deleteMessage, addReaction, removeReaction };
+export {
+  db,
+  auth,
+  perf,
+  analytics,
+  appCheck,
+  createUserInfo,
+  addMessage,
+  editMessage,
+  deleteMessage,
+  addReaction,
+  removeReaction
+};

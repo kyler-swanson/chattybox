@@ -7,3 +7,5 @@ export const config = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
+
+export const RECAPTCHA_PUB_KEY = process.env.REACT_APP_RECAPTCHA_PUB_KEY;
