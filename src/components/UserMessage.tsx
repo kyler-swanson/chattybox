@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { EmojiClickData } from 'emoji-picker-react';
+import { useRef } from 'react';
 import { IoReturnUpForward } from 'react-icons/io5';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { useAuth } from '../contexts/AuthContext';
@@ -8,19 +9,12 @@ import { formatDate } from '../utils/helpers';
 import MessageContextMenu from './MessageContextMenu';
 import ReactionList from './reactions/ReactionList';
 import Avatar from './ui/Avatar';
-import { EmojiClickData } from 'emoji-picker-react';
 
 export default function UserMessage({ message }: { message: Message }) {
   const ref = useRef<null | HTMLDivElement>(null);
 
   const { user } = useAuth();
   const { deleteMessage, addReaction, startEditing, startReplying } = useChat();
-
-  useEffect(() => {
-    if (ref.current) {
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }
-  }, []);
 
   const handleReply = async (): Promise<void> => {
     startReplying(message);

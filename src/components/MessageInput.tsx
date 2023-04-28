@@ -36,6 +36,8 @@ export default function MessageInput() {
   }, [editingMessage, replyingMessage]);
 
   const handleSendMessage = async (): Promise<void> => {
+    inputRef.current?.focus();
+
     setLoading(true);
     await sendMessage();
     setLoading(false);
