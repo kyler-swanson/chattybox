@@ -1,9 +1,22 @@
-// import * as functions from "firebase-functions";
+import BadWordsFilter = require('bad-words');
+import * as functions from 'firebase-functions';
 
-// // Start writing functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+const filter = new BadWordsFilter();
+
+exports.moderator = functions.database.ref('/messages/{messageId}').onWrite((change) => {
+  const message = change.after.val().message;
+
+  if (message && containsProfanity(message)) {
+    return change.after.ref.update({ text: filterProfanity(message) });
+  }
+
+  return null;
+});
+
+const containsProfanity = (text: string) => {
+  return filter.isProfane(text);
+};
+
+const filterProfanity = (text: string) => {
+  return filter.clean(text);
+};
