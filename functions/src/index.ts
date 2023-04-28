@@ -3,11 +3,19 @@ import * as functions from 'firebase-functions';
 
 const filter = new BadWordsFilter();
 
-exports.moderator = functions.database.ref('/messages/{messageId}').onWrite((change) => {
-  const message = change.after.val().message;
+exports.moderator = functions.firestore.document('/messages/{messageId}').onWrite((change) => {
+  const snap = change.after;
+
+  if (!snap.exists) {
+    return null;
+  }
+
+  const message = snap.data()?.message;
 
   if (message && containsProfanity(message)) {
-    return change.after.ref.update({ text: filterProfanity(message) });
+    return snap.ref.update({
+      message: filterProfanity(message)
+    });
   }
 
   return null;
