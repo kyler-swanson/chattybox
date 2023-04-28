@@ -1,6 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, User } from 'firebase/auth';
+import { getPerformance } from 'firebase/performance';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+import { getAnalytics } from 'firebase/analytics';
 import {
   arrayUnion,
   arrayRemove,
@@ -23,6 +25,8 @@ import { config, RECAPTCHA_PUB_KEY } from './config';
 const app = initializeApp(config);
 const db = getFirestore(app);
 const auth = getAuth(app);
+const perf = getPerformance(app);
+const analytics = getAnalytics(app);
 
 const appCheck = initializeAppCheck(app, {
   provider: new ReCaptchaV3Provider(RECAPTCHA_PUB_KEY!),
