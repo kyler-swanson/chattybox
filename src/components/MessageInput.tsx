@@ -91,7 +91,7 @@ export default function MessageInput() {
       <div className='flex gap-2'>
         <div className='p-2 grow relative border rounded-lg focus-within:outline-none focus-within:ring-2 ring-offset-3 ring-blue-500'>
           <textarea
-            className='block w-11/12 h-full resize-none focus:outline-none'
+            className='block w-11/12 h-full resize-none focus:outline-none disabled:bg-white disabled:cursor-not-allowed'
             name='message'
             value={message}
             onChange={handleChange}
