@@ -13,7 +13,8 @@ export const useTheme = () => {
 
 export const useProvideTheme = () => {
   const storedTheme = localStorage.getItem('theme') as 'light' | 'dark';
-  const [theme, setTheme] = useState<'light' | 'dark'>(storedTheme || 'light');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const [theme, setTheme] = useState<'light' | 'dark'>(storedTheme || (prefersDark ? 'dark' : 'light'));
 
   useEffect(() => {
     document.body.className = theme;
