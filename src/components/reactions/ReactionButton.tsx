@@ -14,7 +14,7 @@ export default function ReactionButton({ message, reaction }: ReactionButtonProp
 
   return (
     <button
-      className='py-1 px-2 rounded-md bg-slate-100 border animate-in slide-in-from-right-3 hover:bg-slate-200 transition-colors'
+      className='py-1 px-2 rounded-md bg-slate-100 border animate-in slide-in-from-right-3 hover:bg-slate-200 transition-colors dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700'
       onClick={() => removeReaction(message, reaction)}
       disabled={!user || reaction.authorUid !== user.uid}
     >

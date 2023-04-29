@@ -43,7 +43,7 @@ export default function UserMessage({ message }: { message: Message }) {
         disabled={!user}
       >
         {message.repliesTo && (
-          <div className='flex gap-x-3 translate-x-5'>
+          <div className='flex gap-x-3 translate-x-5 dark:text-gray-400'>
             <IoReturnUpForward />
             <small className='mr-2 truncate'>
               <span className='font-bold'>{message.repliesTo.authorName}</span> {message.repliesTo.message}
@@ -55,14 +55,16 @@ export default function UserMessage({ message }: { message: Message }) {
             <Avatar image={message.authorPhoto} name={message.authorName} />
           </div>
           <div className='grow select-none'>
-            <p className='font-bold truncate'>
+            <p className='font-bold truncate dark:text-gray-50'>
               {message.authorName}{' '}
               {message.createdAt && <small className='ml-1 font-thin'>{formatDate(message.createdAt.toDate())}</small>}
             </p>
-            <span className='prose'>
+            <span className='prose dark:prose-invert'>
               <ReactMarkdown>{message.message}</ReactMarkdown>
             </span>
-            {message.edited && <small className='block text-gray-700 font-thin'>(edited)</small>}
+            {message.edited && (
+              <small className='block text-gray-700 font-thin mb-1 dark:text-gray-400'>(edited)</small>
+            )}
             <ReactionList message={message} />
           </div>
         </div>

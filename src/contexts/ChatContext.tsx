@@ -1,4 +1,4 @@
-import { onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { limit, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { createContext, useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Message } from '../types/Message';
@@ -58,7 +58,7 @@ const useProvideChat = () => {
       messagesCollection,
       // get messages from last hour
       where('createdAt', '>', new Date(new Date().getTime() - 60 * 60 * 1000)),
-
+      limit(100),
       orderBy('createdAt')
     );
 

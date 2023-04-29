@@ -6,7 +6,7 @@ type CharacterCountProps = {
 
 export default function CharacterCount({ count, maxLength, extraClasses = '' }: CharacterCountProps) {
   return (
-    <div className={`text-xs text-gray-500 ${extraClasses}`}>
+    <div className={`text-xs text-gray-500 dark:text-gray-400 ${extraClasses}`}>
       {count} / {maxLength}
     </div>
   );

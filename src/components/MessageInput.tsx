@@ -69,7 +69,7 @@ export default function MessageInput() {
   return (
     <>
       {replyingMessage && (
-        <div className='flex items-center gap-2 animate-in slide-in-from-top-5'>
+        <div className='flex items-center gap-2 animate-in slide-in-from-top-5 dark:text-gray-50'>
           <HiReply className='text-xl' />
           <p className='truncate'>
             Replying to <span className='font-bold'>{replyingMessage.authorName}</span>
@@ -80,7 +80,7 @@ export default function MessageInput() {
         </div>
       )}
       {editingMessage && (
-        <div className='flex items-center gap-2 animate-in slide-in-from-top-5'>
+        <div className='flex items-center gap-2 animate-in slide-in-from-top-5 dark:text-gray-50'>
           <AiFillEdit className='text-xl' />
           <p>Editing</p>
           <button onClick={() => cancelEdit()}>
@@ -89,15 +89,15 @@ export default function MessageInput() {
         </div>
       )}
       <div className='flex gap-2'>
-        <div className='p-2 grow relative border rounded-lg focus-within:outline-none focus-within:ring-2 ring-offset-3 ring-blue-500'>
+        <div className='p-2 grow relative border rounded-lg focus-within:outline-none focus-within:ring-2 ring-offset-3 ring-blue-500 dark:bg-slate-800 dark:border-slate-700'>
           <textarea
-            className='block w-11/12 h-full resize-none focus:outline-none disabled:bg-white disabled:cursor-not-allowed'
+            className='block w-11/12 h-full resize-none focus:outline-none disabled:bg-white disabled:cursor-not-allowed dark:bg-slate-800 dark:text-gray-50'
             name='message'
             value={message}
             onChange={handleChange}
             onKeyDown={handleEnter}
             disabled={!user || loading}
-            placeholder='Enter a message...'
+            placeholder={!user ? 'Please log in to send messages.' : 'Enter a message...'}
             autoComplete='off'
             ref={inputRef}
           ></textarea>
@@ -106,7 +106,7 @@ export default function MessageInput() {
             rel='noreferrer'
             href='https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax'
           >
-            <TbMarkdown className='absolute right-0 top-2/4 -translate-x-4 -translate-y-2/4' />
+            <TbMarkdown className='absolute right-0 top-2/4 -translate-x-4 -translate-y-2/4 dark:text-slate-400' />
           </a>
         </div>
         <Button

@@ -7,7 +7,7 @@ type ButtonProps = {
 
 export default function Button({ children, disabled = false, type, onClick }: ButtonProps) {
   const buttonTypes = {
-    primary: 'text-white bg-violet-950 hover:bg-violet-900',
+    primary: 'text-white bg-violet-950 hover:bg-violet-900 dark:bg-violet-900 dark:hover:bg-violet-800',
     secondary: 'text-black border hover:bg-slate-100',
     clear: 'text-black'
   };

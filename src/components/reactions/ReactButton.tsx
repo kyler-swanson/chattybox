@@ -9,7 +9,7 @@ export default function ReactButton({ onEmojiClick }: ReactButtonProps) {
   const ReactButtonTrigger = <MdOutlineAddReaction className='text-xl' />;
 
   return (
-    <div className='inline-block flex items-center justify-middle p-1'>
+    <div className='inline-block flex items-center justify-middle p-1 dark:text-gray-50'>
       <EmojiPicker trigger={ReactButtonTrigger} onEmojiClick={onEmojiClick} />
     </div>
   );

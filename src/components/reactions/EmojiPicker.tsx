@@ -1,5 +1,6 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { EmojiStyle, default as ReactEmojiPicker } from 'emoji-picker-react';
+import { EmojiStyle, Theme, default as ReactEmojiPicker } from 'emoji-picker-react';
+import { useTheme } from '../../contexts/ThemeContext';
 
 type EmojiPickerProps = {
   trigger: React.ReactNode;
@@ -9,6 +10,7 @@ type EmojiPickerProps = {
 };
 
 export default function EmojiPicker({ trigger, onEmojiClick, width = 300, height = 400 }: EmojiPickerProps) {
+  const { theme } = useTheme();
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger className='focus:outline-none'>{trigger}</DropdownMenu.Trigger>
@@ -19,6 +21,7 @@ export default function EmojiPicker({ trigger, onEmojiClick, width = 300, height
             height={height}
             lazyLoadEmojis={true}
             previewConfig={{ showPreview: false }}
+            theme={theme === 'light' ? Theme.LIGHT : Theme.DARK}
             emojiStyle={EmojiStyle.NATIVE}
             onEmojiClick={onEmojiClick}
           />

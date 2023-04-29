@@ -26,7 +26,7 @@ export default function MessageContextMenu({
   isMine = false
 }: MessageContextMenuProps) {
   const itemStyles =
-    'flex items-center rounded-sm pl-3 pr-10 h-8 text-sm text-violet-950 outline-none cursor-pointer leading-none data-[highlighted]:bg-violet-900 data-[highlighted]:text-white';
+    'flex items-center rounded-sm pl-3 pr-10 h-8 text-sm text-violet-950 outline-none cursor-pointer leading-none data-[highlighted]:bg-violet-900 data-[highlighted]:text-white dark:text-gray-50 dark:data-[highlighted]:bg-violet-600 dark:data-[highlighted]:text-white';
 
   return (
     <ContextMenu.Root>
@@ -34,7 +34,7 @@ export default function MessageContextMenu({
         {children}
       </ContextMenu.Trigger>
       <ContextMenu.Portal>
-        <ContextMenu.Content className='min-w-[8rem] p-1 animate-in slide-in-from-right-2 shadow-md bg-white border border-slate-100 rounded-md overflow-hidden'>
+        <ContextMenu.Content className='min-w-[8rem] p-1 animate-in slide-in-from-right-2 shadow-md bg-white border border-slate-100 rounded-md overflow-hidden dark:bg-slate-700 dark:border-slate-600'>
           <EmojiPicker
             trigger={
               <ContextMenu.Item className={itemStyles} onSelect={(e) => e.preventDefault()}>

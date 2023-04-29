@@ -14,7 +14,7 @@ export default function MessageBox() {
   }, [messages]);
 
   return (
-    <div className='p-4 grow border rounded-lg flex flex-col gap-y-4 overflow-y-scroll overflow-x-hidden'>
+    <div className='p-4 grow border rounded-lg flex flex-col gap-y-4 overflow-y-scroll overflow-x-hidden dark:bg-slate-800 dark:border-slate-700'>
       {messages.map((message) => (
         <UserMessage key={message.id} message={message} />
       ))}

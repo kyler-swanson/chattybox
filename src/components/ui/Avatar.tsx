@@ -14,11 +14,11 @@ export default function Avatar({ size = 'md', image, name }: AvatarProps) {
 
   return (
     <RadixAvatar.Root
-      className={`select-none inline-flex items-center justify-center align-middle overflow-hidden rounded-full ${sizeClass}`}
+      className={`select-none inline-flex items-center justify-center align-middle overflow-hidden rounded-full dark:border dark:border-slate-500 ${sizeClass}`}
     >
       {image && (
         <RadixAvatar.Image
-          className='w-full h-full object-cover bor'
+          className='w-full h-full object-cover'
           src={image}
           alt={`${name}`}
           referrerPolicy='no-referrer'
