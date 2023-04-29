@@ -1,6 +1,6 @@
-# ChattyBox
+# chattybox
 
-ChattyBox is a web application that allows users to chat in real-time with others. It is built using React and Firebase.
+**chattybox** is a web application that allows users to chat in real-time with others. It is built using React and Firebase.
 
 ## Demo
 
@@ -8,7 +8,7 @@ https://chattybox-c0902.web.app
 
 ## Features
 
-ChattyBox lets you join a lively community and interact with others in real-time. Here's what you can do:
+**chattybox** lets you join a lively community and interact with others in real-time. Here's what you can do:
 
 - 💬 Instantly send and receive messages with other users, and see them appear on your screen as soon as they're posted.
 - ✏️ Edit your messages if you made a typo or want to add more details.
@@ -19,7 +19,7 @@ ChattyBox lets you join a lively community and interact with others in real-time
 
 ## Technologies Used
 
-ChattyBox is built using the following technologies:
+**chattybox** is built using the following technologies:
 
 - React
 - Firebase (Firestore, Authentication, Hosting)
@@ -28,7 +28,7 @@ ChattyBox is built using the following technologies:
 
 ## Getting Started
 
-To get started with ChattyBox, you'll need to do the following:
+To get started with **chattybox**, you'll need to do the following:
 
 Clone the repository to your local machine:
 
@@ -62,10 +62,10 @@ The application is automatically built and deployed to Firebase Hosting using Gi
 
 ## Contributions
 
-Contributions to ChattyBox are always welcome! If you have any suggestions, bug reports, or feature requests, please open an issue on this repository.
+Contributions to **chattybox** are always welcome! If you have any suggestions, bug reports, or feature requests, please open an issue on this repository.
 
-If you'd like to contribute code to ChattyBox, please fork this repository and submit a pull request with your changes. All contributions must adhere to our code of conduct.
+If you'd like to contribute code to **chattybox**, please fork this repository and submit a pull request with your changes. All contributions must adhere to our code of conduct.
 
 ## License
 
-ChattyBox is released under the MIT License. See [LICENSE.md](https://github.com/kyler-swanson/chattybox/blob/main/LICENSE.md) for details.
+**chattybox** is released under the MIT License. See [LICENSE.md](https://github.com/kyler-swanson/chattybox/blob/main/LICENSE.md) for details.
