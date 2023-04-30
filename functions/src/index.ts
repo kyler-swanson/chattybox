@@ -42,13 +42,27 @@ exports.updateModifiedReplies = functions.firestore.document('/messages/{message
     return query.get().then((messages) => {
       messages.forEach((snap) => {
         snap.ref.update({
-          'repliesTo.message': '(deleted)'
+          'repliesTo.message': '(edited)'
         });
       });
     });
   }
 
   return null;
+});
+
+exports.updateDeletedReplies = functions.firestore.document('/messages/{messageId}').onDelete((change) => {
+  const data = change.data();
+
+  const messagesRef = admin.firestore().collection('messages');
+  const query = messagesRef.where('repliesTo.id', '==', data.id);
+  return query.get().then((messages) => {
+    messages.forEach((snap) => {
+      snap.ref.update({
+        'repliesTo.message': '(deleted)'
+      });
+    });
+  });
 });
 
 // remove messages older than 1 hour
