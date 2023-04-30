@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: demo
-      url: https://chattybox-c0902.web.app
+      url: https://${{ secrets.FIREBASE_PROJECT_ID }}.web.app
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
