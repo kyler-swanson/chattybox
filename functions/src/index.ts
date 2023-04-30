@@ -28,3 +28,19 @@ const containsProfanity = (text: string) => {
 const filterProfanity = (text: string) => {
   return filter.clean(text);
 };
+
+// remove messages older than 1 hour
+exports.cleaner = functions.pubsub.schedule('every 1 hours').onRun(async () => {
+  const now = Date.now();
+  const cutoff = now - 60 * 60 * 1000;
+
+  const messagesRef = admin.firestore().collection('messages');
+  const query = messagesRef.where('createdAt', '<', cutoff);
+  const messages = await query.get();
+
+  messages.forEach((snap) => {
+    snap.ref.delete();
+  });
+
+  return null;
+});

@@ -56,8 +56,6 @@ const useProvideChat = () => {
   useEffect(() => {
     const queryRef = query(
       messagesCollection,
-      // get messages from last hour
-      where('createdAt', '>', new Date(new Date().getTime() - 60 * 60 * 1000)),
       limit(100),
       orderBy('createdAt')
     );
