@@ -1,17 +1,17 @@
-import { limit, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { limit, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { createContext, useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Message } from '../types/Message';
+import { Reaction } from '../types/Reaction';
 import {
   addMessage,
   editMessage,
-  deleteMessage as fbDelete,
   addReaction as fbAddReaction,
+  deleteMessage as fbDelete,
   removeReaction as fbRemoveReaction,
   messagesCollection
 } from '../utils/firebase';
 import { useAuth } from './AuthContext';
-import { Reaction } from '../types/Reaction';
 
 const ACTION_DELAY = 500;
 
@@ -54,11 +54,7 @@ const useProvideChat = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    const queryRef = query(
-      messagesCollection,
-      limit(100),
-      orderBy('createdAt')
-    );
+    const queryRef = query(messagesCollection, limit(100), orderBy('createdAt'));
 
     const unsub = onSnapshot(queryRef, (update) => {
       const newMessages = update.docs.map((doc) => doc.data());
