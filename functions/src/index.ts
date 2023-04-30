@@ -3,6 +3,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
 const filter = new BadWordsFilter();
+admin.initializeApp(functions.config().firebase);
 
 // cloud function to filter profanity
 exports.moderator = functions.firestore.document('/messages/{messageId}').onWrite((change) => {
