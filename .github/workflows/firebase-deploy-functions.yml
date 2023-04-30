@@ -1,4 +1,4 @@
-name: Deploy Firebase Cloud Functions
+name: Build and Deploy
 'on':
   workflow_dispatch:
   push:
@@ -8,23 +8,31 @@ name: Deploy Firebase Cloud Functions
       - 'functions/**'
 jobs:
   build-and-deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
         with:
           node-version: 16.x
-      - uses: actions/cache@v2
+      - name: Cache Dependencies
+        uses: actions/cache@v2
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/functions/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: Build Cloud Functions
+      - name: Install Dependencies
         run: npm ci
         working-directory: functions
-      - name: Create SA key
-        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_FUNCTIONS }}' > $HOME/gcloud.json
-      - name: Deploy Cloud Functions
-        run: export GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json && npx firebase-tools deploy --project chattybox-c0902 --only functions --json
+      - name: Build
+        run: npm run build
         working-directory: functions
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions
+        env:
+          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FUNCTIONS }}
