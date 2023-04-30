@@ -67,6 +67,7 @@ exports.updateDeletedReplies = functions.firestore.document('/messages/{messageI
 
 // remove messages older than 1 hour
 exports.cleaner = functions.pubsub.schedule('0 * * * *').onRun(async () => {
+  console.log('running');
   const now = Date.now();
   const cutoff = now - 60 * 60 * 1000;
 
@@ -74,8 +75,11 @@ exports.cleaner = functions.pubsub.schedule('0 * * * *').onRun(async () => {
   const query = messagesRef.where('createdAt', '<', cutoff);
   const messages = await query.get();
 
-  messages.forEach((snap) => {
-    snap.ref.delete();
+  console.log('query done');
+
+  messages.forEach(async (snap) => {
+    console.log(snap);
+    await snap.ref.delete();
   });
 
   return null;
