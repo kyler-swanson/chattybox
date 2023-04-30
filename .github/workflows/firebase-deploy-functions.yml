@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and Deploy to Firebase Functions
 'on':
   workflow_dispatch:
   push:
@@ -35,4 +35,5 @@ jobs:
         with:
           args: deploy --only functions
         env:
+          PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FUNCTIONS }}
