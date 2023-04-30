@@ -66,7 +66,7 @@ exports.updateDeletedReplies = functions.firestore.document('/messages/{messageI
 });
 
 // remove messages older than 1 hour
-exports.cleaner = functions.pubsub.schedule('every 1 hours').onRun(async () => {
+exports.cleaner = functions.pubsub.schedule('0 * * * *').onRun(async () => {
   const now = Date.now();
   const cutoff = now - 60 * 60 * 1000;
 
