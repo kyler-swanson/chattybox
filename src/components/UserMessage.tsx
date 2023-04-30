@@ -1,7 +1,6 @@
 import { EmojiClickData } from 'emoji-picker-react';
 import { useRef } from 'react';
 import { IoReturnUpForward } from 'react-icons/io5';
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { useAuth } from '../contexts/AuthContext';
 import { useChat } from '../contexts/ChatContext';
 import { Message } from '../types/Message';
@@ -9,6 +8,7 @@ import { formatDate } from '../utils/helpers';
 import MessageContextMenu from './MessageContextMenu';
 import ReactionList from './reactions/ReactionList';
 import Avatar from './ui/Avatar';
+import Markdown from './ui/Markdown';
 
 export default function UserMessage({ message }: { message: Message }) {
   const ref = useRef<null | HTMLDivElement>(null);
@@ -59,9 +59,7 @@ export default function UserMessage({ message }: { message: Message }) {
               {message.authorName}{' '}
               {message.createdAt && <small className='ml-1 font-thin'>{formatDate(message.createdAt.toDate())}</small>}
             </p>
-            <span className='prose dark:prose-invert'>
-              <ReactMarkdown>{message.message}</ReactMarkdown>
-            </span>
+            <Markdown content={message.message} />
             {message.edited && (
               <small className='block text-gray-700 font-thin mb-1 dark:text-gray-400'>(edited)</small>
             )}

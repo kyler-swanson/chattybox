@@ -1,4 +1,4 @@
-import { limit, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { limit, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { createContext, useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Message } from '../types/Message';
@@ -54,7 +54,14 @@ const useProvideChat = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    const queryRef = query(messagesCollection, limit(100), orderBy('createdAt'));
+    const queryRef = query(
+      messagesCollection,
+      // get messages from last hour
+      where('createdAt', '>', new Date(new Date().getTime() - 60 * 60 * 1000)),
+      limit(100),
+
+      orderBy('createdAt')
+    );
 
     const unsub = onSnapshot(queryRef, (update) => {
       const newMessages = update.docs.map((doc) => doc.data());

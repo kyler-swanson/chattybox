@@ -2,7 +2,7 @@ import BadWordsFilter = require('bad-words');
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
-const filter = new BadWordsFilter();
+const filter = new BadWordsFilter({ placeHolder: 'x' });
 admin.initializeApp(functions.config().firebase);
 
 // cloud function to filter profanity
