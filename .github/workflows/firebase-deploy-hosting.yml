@@ -4,7 +4,7 @@ name: Build and Deploy to Firebase Hosting
     branches:
       - main
 env:
-  PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+  PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
 jobs:
   build:
     name: Build

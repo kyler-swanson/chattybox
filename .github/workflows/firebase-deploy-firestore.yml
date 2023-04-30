@@ -7,7 +7,8 @@ name: Deploy Firestore Rules
     paths:
       - 'firestore.rules'
 jobs:
-  build-and-deploy:
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
