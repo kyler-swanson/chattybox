@@ -3,6 +3,8 @@ name: Build and Deploy to Firebase Hosting
   push:
     branches:
       - main
+env:
+  PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
 jobs:
   build:
     name: Build
@@ -34,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: demo
-      url: https://${{ secrets.FIREBASE_PROJECT_ID }}.web.app
+      url: https://$PROJECT_ID.web.app
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
