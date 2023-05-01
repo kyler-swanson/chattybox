@@ -64,19 +64,3 @@ exports.updateDeletedReplies = functions.firestore.document('/messages/{messageI
     });
   });
 });
-
-// remove messages older than 1 hour
-exports.cleaner = functions.pubsub.schedule('0 * * * *').onRun(async () => {
-  await admin
-    .firestore()
-    .collection('messages')
-    .where('createdAt', '<', new Date(new Date().getTime() - 60 * 60 * 1000))
-    .get()
-    .then((messages) => {
-      messages.forEach(async (snap) => {
-        await snap.ref.delete();
-      });
-    });
-
-  return null;
-});
