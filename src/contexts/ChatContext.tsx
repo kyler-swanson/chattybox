@@ -1,4 +1,4 @@
-import { limit, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { createContext, useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Message } from '../types/Message';
