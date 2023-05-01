@@ -3,6 +3,8 @@ name: Build and Deploy to Firebase Hosting
   push:
     branches:
       - main
+    paths-ignore:
+      - 'functions/**'
 env:
   PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
 jobs:
