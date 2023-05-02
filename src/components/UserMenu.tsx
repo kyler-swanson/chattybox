@@ -4,6 +4,7 @@ import { TbLogout } from 'react-icons/tb';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import Avatar from './ui/Avatar';
+import { useCallback } from 'react';
 
 export default function UserMenu() {
   const itemStyles =
@@ -12,16 +13,16 @@ export default function UserMenu() {
   const { user, signOut } = useAuth();
   const { theme, setTheme } = useTheme();
 
-  const handleLogOut = () => {
+  const handleLogOut = useCallback(() => {
     signOut().catch((error) => {
       alert('Logout failed. Please try again.');
       console.log(error);
     });
-  };
+  }, [signOut]);
 
-  const handleSwitchTheme = () => {
+  const handleSwitchTheme = useCallback(() => {
     setTheme(theme === 'light' ? 'dark' : 'light');
-  };
+  }, [theme, setTheme]);
 
   return (
     <>

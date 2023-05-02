@@ -2,25 +2,25 @@ import { FaGoogle } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 import Button from './ui/Button';
 import UserMenu from './UserMenu';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import Avatar from './ui/Avatar';
 
 export default function Login() {
-  const { user, signInWithGoogle } = useAuth();
+  const { user, signIn } = useAuth();
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleLogin = () => {
+  const handleLogin = useCallback(() => {
     setLoading(true);
 
-    signInWithGoogle()
+    signIn()
       .then(() => setLoading(false))
       .catch((error) => {
         alert(error);
         console.log(error);
         setLoading(false);
       });
-  };
+  }, [signIn]);
 
   return (
     <>

@@ -1,12 +1,14 @@
-import { GoogleAuthProvider, User, browserSessionPersistence, signInWithPopup } from 'firebase/auth';
+import { User } from 'firebase/auth';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { UserInfo } from '../types/UserInfo';
-import { auth, createUserInfo } from '../utils/firebase';
+import { createUser } from '../utils/services/firebase/auth/createUser';
+import { signInWithGoogle } from '../utils/services/firebase/auth/login';
+import { logOut } from '../utils/services/firebase/auth/logout';
+import { auth } from '../utils/services/firebase/config';
 
 type AuthContextType = {
   user: UserInfo | null;
-  setUser: (user: UserInfo) => void;
-  signInWithGoogle: () => Promise<void>;
+  signIn: () => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -19,23 +21,18 @@ export const useAuth = () => {
 export const useProvideAuth = () => {
   const [user, setUser] = useState<UserInfo | null>(null);
 
-  const signInWithGoogle = async (): Promise<void> => {
-    const provider = new GoogleAuthProvider();
-
-    await auth.setPersistence(browserSessionPersistence);
-    const result = await signInWithPopup(auth, provider);
-
-    await handleUser(result.user!);
+  const signIn = async () => {
+    await signInWithGoogle();
   };
 
   const signOut = async () => {
-    await auth.signOut();
+    await logOut();
     setUser(null);
   };
 
-  const handleUser = async (rawUser: User) => {
+  const handleUserUpdate = async (rawUser: User) => {
     if (rawUser) {
-      const newUser = await createUserInfo(rawUser);
+      const newUser = await createUser(rawUser);
 
       setUser(newUser!);
     } else {
@@ -44,15 +41,14 @@ export const useProvideAuth = () => {
   };
 
   useEffect(() => {
-    const unsub = auth.onAuthStateChanged(async (user) => await handleUser(user!));
+    const unsub = auth.onAuthStateChanged(async (user: User | null) => await handleUserUpdate(user!));
 
     return () => unsub();
   }, [setUser]);
 
   return {
     user,
-    setUser,
-    signInWithGoogle,
+    signIn,
     signOut
   };
 };

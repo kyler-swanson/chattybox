@@ -1,19 +1,16 @@
-import { onSnapshot, orderBy, query, where } from 'firebase/firestore';
-import { createContext, useContext, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import { createContext, useCallback, useContext, useState } from 'react';
+import { useCooldown } from '../hooks/useCooldown';
+import { useMessageListener } from '../hooks/useMessagesListener';
 import { Message } from '../types/Message';
 import { Reaction } from '../types/Reaction';
-import {
-  addMessage,
-  editMessage,
-  addReaction as fbAddReaction,
-  deleteMessage as fbDelete,
-  removeReaction as fbRemoveReaction,
-  messagesCollection
-} from '../utils/firebase';
+import { createMessage } from '../utils/services/firebase/message/create';
+import { deleteMessage } from '../utils/services/firebase/message/delete';
+import { editMessage } from '../utils/services/firebase/message/edit';
+import { createReaction } from '../utils/services/firebase/message/reaction/create';
+import { deleteReaction } from '../utils/services/firebase/message/reaction/delete';
 import { useAuth } from './AuthContext';
 
-const ACTION_DELAY = 500;
+const ACTION_COOLDOWN = 500;
 
 type ChatContextType = {
   message: string;
@@ -21,7 +18,7 @@ type ChatContextType = {
 
   messages: Message[];
   sendMessage: () => Promise<void>;
-  deleteMessage: (message: Message) => Promise<void>;
+  removeMessage: (message: Message) => Promise<void>;
 
   editingMessage: Message | null;
   startEditing: (message?: Message | null) => void;
@@ -46,19 +43,15 @@ const useProvideChat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [sentMessages, setSentMessages] = useState<Message[]>([]);
 
-  const [lastAction, setLastAction] = useState<number>(0);
-
   const [editingMessage, setEditingMessage] = useState<Message | null>(null);
   const [replyingMessage, setReplyingMessage] = useState<Message | null>(null);
 
+  const { tryAction } = useCooldown(ACTION_COOLDOWN);
+
   const { user } = useAuth();
 
-  useEffect(() => {
-    const queryRef = query(messagesCollection, where('createdAt', '>', new Date()), orderBy('createdAt'));
-
-    const unsub = onSnapshot(queryRef, (update) => {
-      const newMessages = update.docs.map((doc) => doc.data());
-
+  const handleNewMessages = useCallback(
+    (newMessages: Message[]) => {
       setMessages(newMessages);
 
       if (user) {
@@ -68,43 +61,38 @@ const useProvideChat = () => {
           })
         );
       }
-    });
+    },
+    [user]
+  );
 
-    return () => unsub();
-  }, [user]);
+  useMessageListener(handleNewMessages);
 
   const sendMessage = async () => {
-    if (!isCalm()) {
-      toast.error('You must wait before sending another message!');
-      return;
-    }
+    tryAction(async () => {
+      if (editingMessage) {
+        // if we are editing, we don't want to send a message
+        await editMessage(editingMessage.id, message);
+        setEditingMessage(null);
+      } else {
+        // if we are replying, we want to send a message with the reply, otherwise just send a message
+        await createMessage(message, replyingMessage);
+        setReplyingMessage(null);
+      }
 
-    setLastAction(new Date().getTime());
-
-    if (editingMessage) {
-      await editMessage(editingMessage.id, message);
-      setEditingMessage(null);
-    } else {
-      await addMessage(message, replyingMessage);
-      setReplyingMessage(null);
-    }
-
-    setMessage('');
+      setMessage('');
+    }, 'You must wait before sending a message!');
   };
 
-  const deleteMessage = async (message: Message) => {
-    if (!isCalm()) {
-      toast.error('You must wait before deleting another message!');
-      return;
-    }
-
-    setLastAction(new Date().getTime());
-
-    await fbDelete(message.id);
+  const removeMessage = async (message: Message) => {
+    tryAction(async () => await deleteMessage(message.id), 'You must wait before deleting a message!');
   };
 
-  const isCalm = () => {
-    return new Date().getTime() - lastAction > ACTION_DELAY;
+  const addReaction = async (message: Message, emoji: string) => {
+    tryAction(async () => await createReaction(message, emoji), 'You must wait before reacting to a message!');
+  };
+
+  const removeReaction = async (message: Message, reaction: Reaction) => {
+    tryAction(async () => await deleteReaction(message, reaction), 'You must wait before removing a reaction!');
   };
 
   const startEditing = (message: Message | null = null) => {
@@ -113,6 +101,7 @@ const useProvideChat = () => {
       setReplyingMessage(null);
     }
 
+    // use the last sent message if no message is provided
     if (!message) {
       if (sentMessages.length === 0) {
         return;
@@ -143,28 +132,6 @@ const useProvideChat = () => {
     setReplyingMessage(null);
   };
 
-  const addReaction = async (message: Message, emoji: string) => {
-    if (!isCalm()) {
-      toast.error('You must wait before reacting to a message!');
-      return;
-    }
-
-    setLastAction(new Date().getTime());
-
-    await fbAddReaction(message, emoji);
-  };
-
-  const removeReaction = async (message: Message, reaction: Reaction) => {
-    if (!isCalm()) {
-      toast.error('You must wait before reacting to a message!');
-      return;
-    }
-
-    setLastAction(new Date().getTime());
-
-    await fbRemoveReaction(message, reaction);
-  };
-
   return {
     message,
     messages,
@@ -172,7 +139,7 @@ const useProvideChat = () => {
     replyingMessage,
     setMessage,
     sendMessage,
-    deleteMessage,
+    removeMessage,
     startEditing,
     cancelEdit,
     startReplying,

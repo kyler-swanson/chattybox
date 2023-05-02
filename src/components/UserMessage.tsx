@@ -1,5 +1,5 @@
 import { EmojiClickData } from 'emoji-picker-react';
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { IoReturnUpForward } from 'react-icons/io5';
 import { useAuth } from '../contexts/AuthContext';
 import { useChat } from '../contexts/ChatContext';
@@ -14,23 +14,26 @@ export default function UserMessage({ message }: { message: Message }) {
   const ref = useRef<null | HTMLDivElement>(null);
 
   const { user } = useAuth();
-  const { deleteMessage, addReaction, startEditing, startReplying } = useChat();
+  const { removeMessage, addReaction, startEditing, startReplying } = useChat();
 
-  const handleReply = async (): Promise<void> => {
+  const handleReply = useCallback(async (): Promise<void> => {
     startReplying(message);
-  };
+  }, [message, startReplying]);
 
-  const handleReaction = async (emoji: EmojiClickData): Promise<void> => {
-    await addReaction(message, emoji.emoji);
-  };
+  const handleReaction = useCallback(
+    async (emoji: EmojiClickData): Promise<void> => {
+      await addReaction(message, emoji.emoji);
+    },
+    [message, addReaction]
+  );
 
-  const handleEditMessage = async (): Promise<void> => {
+  const handleEditMessage = useCallback(async (): Promise<void> => {
     startEditing(message);
-  };
+  }, [message, startEditing]);
 
-  const handleDeleteMessage = async (): Promise<void> => {
-    await deleteMessage(message);
-  };
+  const handleDeleteMessage = useCallback(async (): Promise<void> => {
+    await removeMessage(message);
+  }, [message, removeMessage]);
 
   return (
     <div ref={ref}>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { HiReply } from 'react-icons/hi';
 import { TbMarkdown, TbSend } from 'react-icons/tb';
 import { RxCross1 } from 'react-icons/rx';
@@ -35,36 +35,42 @@ export default function MessageInput() {
     }
   }, [editingMessage, replyingMessage]);
 
-  const handleSendMessage = async (): Promise<void> => {
+  const handleSendMessage = useCallback(async (): Promise<void> => {
     inputRef.current?.focus();
 
     setLoading(true);
     await sendMessage();
     setLoading(false);
-  };
+  }, [sendMessage]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    if (e.target.value.length > MAX_LENGTH) {
-      return;
-    }
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+      if (e.target.value.length > MAX_LENGTH) {
+        return;
+      }
 
-    setMessage(e.target.value);
-  };
+      setMessage(e.target.value);
+    },
+    [setMessage]
+  );
 
-  const handleEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (user && e.key === 'Enter' && !e.shiftKey && message.trim().length > 0) {
-      handleSendMessage();
-    }
+  const handleEnter = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+      if (user && e.key === 'Enter' && !e.shiftKey && message.trim().length > 0) {
+        handleSendMessage();
+      }
 
-    if (user && e.key === 'ArrowUp') {
-      startEditing();
-    }
+      if (user && e.key === 'ArrowUp') {
+        startEditing();
+      }
 
-    if (user && e.key === 'Escape') {
-      cancelEdit();
-      cancelReply();
-    }
-  };
+      if (user && e.key === 'Escape') {
+        cancelEdit();
+        cancelReply();
+      }
+    },
+    [user, message, handleSendMessage, startEditing, cancelEdit, cancelReply]
+  );
 
   return (
     <>
