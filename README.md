@@ -25,7 +25,8 @@ https://chattybox-c0902.web.app
 **chattybox** is built using the following technologies:
 
 - React
-- Firebase (Firestore, Authentication, Hosting)
+- Firebase (Firestore, Cloud Functions, Authentication, Hosting)
+  - Cloud Functions are used to moderate messages, ensuring that they are appropriate for all users.s
 - Radix UI Primitives
 - Tailwind CSS
 
