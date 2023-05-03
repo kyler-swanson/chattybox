@@ -26,7 +26,7 @@ https://chattybox-c0902.web.app
 
 - React
 - Firebase (Firestore, Cloud Functions, Authentication, Hosting)
-  - Cloud Functions are used to moderate messages, ensuring that they are appropriate for all users.s
+  - Cloud Functions are used to moderate messages, ensuring that they are appropriate for all users.
 - Radix UI Primitives
 - Tailwind CSS
 
