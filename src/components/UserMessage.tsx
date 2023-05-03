@@ -48,7 +48,7 @@ export default function UserMessage({ message }: { message: Message }) {
         {message.repliesTo && (
           <div className='flex gap-x-3 translate-x-5 dark:text-gray-400'>
             <IoReturnUpForward className='text-2xl' />
-            <small className='mr-2 truncate'>
+            <small className='mr-2 truncate max-w-sm'>
               <span className='font-bold'>{message.repliesTo.authorName}</span> {message.repliesTo.message}
             </small>
           </div>
