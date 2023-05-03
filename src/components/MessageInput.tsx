@@ -9,6 +9,9 @@ import useAutosizeTextArea from '../hooks/useAutosizeTextArea';
 import Button from './ui/Button';
 import CharacterCount from './ui/CharacterCount';
 import Spinner from './ui/Spinner';
+import GiphyMenu from './gifs/GiphyMenu';
+import { MdGif } from 'react-icons/md';
+import { IGif } from '@giphy/js-types';
 
 const MAX_LENGTH = 500;
 
@@ -16,8 +19,17 @@ export default function MessageInput() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const { user } = useAuth();
-  const { message, editingMessage, replyingMessage, setMessage, sendMessage, startEditing, cancelEdit, cancelReply } =
-    useChat();
+  const {
+    message,
+    editingMessage,
+    replyingMessage,
+    setMessage,
+    sendMessage,
+    sendGif,
+    startEditing,
+    cancelEdit,
+    cancelReply
+  } = useChat();
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -42,6 +54,16 @@ export default function MessageInput() {
     await sendMessage();
     setLoading(false);
   }, [sendMessage]);
+
+  const handleSendGif = useCallback(
+    async (gif: IGif, e: any): Promise<void> => {
+      e.preventDefault();
+      setLoading(true);
+      await sendGif(gif);
+      setLoading(false);
+    },
+    [sendGif]
+  );
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -115,6 +137,10 @@ export default function MessageInput() {
             <TbMarkdown className='absolute right-0 top-2/4 -translate-x-4 -translate-y-2/4 dark:text-slate-400' />
           </a>
         </div>
+        <GiphyMenu
+          trigger={<MdGif className='text-4xl text-violet-950 dark:text-gray-50' />}
+          onGifClick={handleSendGif}
+        />
         <Button
           type='primary'
           onClick={() => handleSendMessage()}

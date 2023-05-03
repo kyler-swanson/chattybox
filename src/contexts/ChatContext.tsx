@@ -9,6 +9,7 @@ import { editMessage } from '../utils/services/firebase/message/edit';
 import { createReaction } from '../utils/services/firebase/message/reaction/create';
 import { deleteReaction } from '../utils/services/firebase/message/reaction/delete';
 import { useAuth } from './AuthContext';
+import { IGif } from '@giphy/js-types';
 
 const ACTION_COOLDOWN = 500;
 
@@ -18,6 +19,7 @@ type ChatContextType = {
 
   messages: Message[];
   sendMessage: () => Promise<void>;
+  sendGif: (gif: IGif) => Promise<void>;
   removeMessage: (message: Message) => Promise<void>;
 
   editingMessage: Message | null;
@@ -83,6 +85,13 @@ const useProvideChat = () => {
     }, 'You must wait before sending a message!');
   };
 
+  const sendGif = async (gif: IGif) => {
+    tryAction(async () => {
+      await createMessage(`![](${gif.images.preview_webp.url})`, replyingMessage);
+      setReplyingMessage(null);
+    }, 'You must wait before sending a message!');
+  };
+
   const removeMessage = async (message: Message) => {
     tryAction(async () => await deleteMessage(message.id), 'You must wait before deleting a message!');
   };
@@ -139,6 +148,7 @@ const useProvideChat = () => {
     replyingMessage,
     setMessage,
     sendMessage,
+    sendGif,
     removeMessage,
     startEditing,
     cancelEdit,

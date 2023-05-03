@@ -2,10 +2,10 @@ type ButtonProps = {
   children: React.ReactNode;
   disabled?: boolean;
   type: 'primary' | 'secondary' | 'clear';
-  onClick: () => void;
+  onClick?: () => void;
 };
 
-export default function Button({ children, disabled = false, type, onClick }: ButtonProps) {
+export default function Button({ children, disabled = false, type, onClick = undefined }: ButtonProps) {
   const buttonTypes = {
     primary: 'text-white bg-violet-950 hover:bg-violet-900 dark:bg-violet-900 dark:hover:bg-violet-800',
     secondary: 'text-black border hover:bg-slate-100',
