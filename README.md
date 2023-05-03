@@ -15,6 +15,9 @@ https://chattybox-c0902.web.app
 - 🗑️ Delete your messages if you change your mind or want to remove a message from the conversation.
 - 💬 Reply to messages to keep the discussion going or ask follow-up questions.
 - 👍 React to messages with fun and expressive emoji, to show your mood or agreement.
+- 📝 Send messages in Markdown, to add formatting and style to your messages.
+- 🌙 Toggle between light and dark mode, to suit your preferences.
+- 🥳 Send GIFs using Giphy's API, to add some fun to your messages.
 - 🚀 All data is securely stored in Firebase's Firestore database, and user authentication is seamlessly handled by Firebase Authentication. The website is hosted on Firebase Hosting, ensuring a fast and reliable experience for all users.
 
 ## Technologies Used
